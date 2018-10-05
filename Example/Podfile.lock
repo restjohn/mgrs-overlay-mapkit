@@ -1,0 +1,39 @@
+PODS:
+  - GEOTRANS (3.7)
+  - GEOTRANSUtil (0.1.0):
+    - GEOTRANS (~> 3.7)
+  - MGRSMapKit (0.1.0):
+    - GEOTRANSUtil (~> 0.1.0)
+  - Nimble (7.3.1)
+  - Quick (1.2.0)
+
+DEPENDENCIES:
+  - GEOTRANS (from `../../GEOTRANS`)
+  - GEOTRANSUtil (from `../../GEOTRANSUtil`)
+  - MGRSMapKit (from `../`)
+  - Nimble (~> 7.3.1)
+  - Quick (~> 1.2.0)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Nimble
+    - Quick
+
+EXTERNAL SOURCES:
+  GEOTRANS:
+    :path: "../../GEOTRANS"
+  GEOTRANSUtil:
+    :path: "../../GEOTRANSUtil"
+  MGRSMapKit:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  GEOTRANS: 798b90e6c0ef8d3ab9648f0b60830b63b1c52a66
+  GEOTRANSUtil: 932df24de8b21eabf38a2ba47239bcc632e58f14
+  MGRSMapKit: e3fcfcf5db655f7a4d6c75f4af0e567b74ad8bb7
+  Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
+  Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
+
+PODFILE CHECKSUM: cb1f99459afc1d0f8c92ac127dd98241f8c63cf4
+
+COCOAPODS: 1.5.3

@@ -339,12 +339,16 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-MGRSMapKit_Example/Pods-MGRSMapKit_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GEOTRANS/GEOTRANS.framework",
+				"${BUILT_PRODUCTS_DIR}/GEOTRANSUtil/GEOTRANSUtil.framework",
 				"${BUILT_PRODUCTS_DIR}/MGRSMapKit/MGRSMapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GEOTRANS.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GEOTRANSUtil.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MGRSMapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

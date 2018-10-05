@@ -1,12 +1,16 @@
 use_frameworks!
 
 target 'MGRSMapKit_Example' do
+
   pod 'MGRSMapKit', :path => '../'
+  pod 'GEOTRANS', :path => '../../GEOTRANS'
+  pod 'GEOTRANSUtil', :path => '../../GEOTRANSUtil'
 
   target 'MGRSMapKit_Tests' do
+
     inherit! :search_paths
 
     pod 'Quick', '~> 1.2.0'
-    pod 'Nimble', '~> 7.0.2'
+    pod 'Nimble', '~> 7.3.1'
   end
 end
