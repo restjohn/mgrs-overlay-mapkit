@@ -1,0 +1,29 @@
+# MGRSMapKit
+
+[![CI Status](https://img.shields.io/travis/restjohn/MGRSMapKit.svg?style=flat)](https://travis-ci.org/restjohn/MGRSMapKit)
+[![Version](https://img.shields.io/cocoapods/v/MGRSMapKit.svg?style=flat)](https://cocoapods.org/pods/MGRSMapKit)
+[![License](https://img.shields.io/cocoapods/l/MGRSMapKit.svg?style=flat)](https://cocoapods.org/pods/MGRSMapKit)
+[![Platform](https://img.shields.io/cocoapods/p/MGRSMapKit.svg?style=flat)](https://cocoapods.org/pods/MGRSMapKit)
+
+## Example
+
+To run the example project, clone the repo, and run `pod install` from the Example directory first.
+
+## Requirements
+
+## Installation
+
+MGRSMapKit is available through [CocoaPods](https://cocoapods.org). To install
+it, simply add the following line to your Podfile:
+
+```ruby
+pod 'MGRSMapKit'
+```
+
+## Author
+
+restjohn, restjohn@users.noreply.github.com
+
+## License
+
+MGRSMapKit is available under the MIT license. See the LICENSE file for more info.
