@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -20,11 +20,80 @@
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="7De-VS-9po">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </mapView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PhE-KY-H9w" userLabel="Zoom Label">
+                                <rect key="frame" x="234" y="621.5" width="42" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="42" id="rca-Iz-iP6"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QPX-TB-eFs" userLabel="Zoom In">
+                                <rect key="frame" x="322" y="617" width="30" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="QPX-TB-eFs" secondAttribute="height" multiplier="1:1" id="Nko-fn-nXM"/>
+                                    <constraint firstAttribute="height" constant="30" id="qvk-Gq-ni0"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="+"/>
+                                <connections>
+                                    <action selector="onZoomInTapped" destination="vXZ-lx-hvc" eventType="touchUpInside" id="ZoT-I9-U6N"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ha0-oy-pkl" userLabel="Zoom Out">
+                                <rect key="frame" x="287" y="617" width="30" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="-"/>
+                                <connections>
+                                    <action selector="onZoomOutTapped" destination="vXZ-lx-hvc" eventType="touchUpInside" id="ctt-8t-zXI"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cbP-9c-ozF" userLabel="Redraw">
+                                <rect key="frame" x="16" y="615" width="60" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="Fka-14-Diy"/>
+                                    <constraint firstAttribute="height" constant="34" id="NpU-c4-KjM"/>
+                                </constraints>
+                                <state key="normal" title="Redraw"/>
+                                <connections>
+                                    <action selector="onRedrawTapped" destination="vXZ-lx-hvc" eventType="touchUpInside" id="7jT-PQ-5ec"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="7De-VS-9po" firstAttribute="width" secondItem="kh9-bI-dsS" secondAttribute="width" id="1bh-4K-5Cz"/>
+                            <constraint firstItem="cbP-9c-ozF" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="16" id="2Vd-cX-0mb"/>
+                            <constraint firstItem="7De-VS-9po" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="Axa-yD-2iQ"/>
+                            <constraint firstAttribute="trailing" secondItem="QPX-TB-eFs" secondAttribute="trailing" constant="23" id="FFP-SZ-bCx"/>
+                            <constraint firstItem="ha0-oy-pkl" firstAttribute="width" secondItem="QPX-TB-eFs" secondAttribute="width" id="Fmo-UK-Nyh"/>
+                            <constraint firstItem="ha0-oy-pkl" firstAttribute="centerY" secondItem="QPX-TB-eFs" secondAttribute="centerY" id="L5I-jR-lSo"/>
+                            <constraint firstItem="PhE-KY-H9w" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="LNO-iD-lOP"/>
+                            <constraint firstItem="7De-VS-9po" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="TNG-ub-uAX"/>
+                            <constraint firstItem="QPX-TB-eFs" firstAttribute="leading" secondItem="ha0-oy-pkl" secondAttribute="trailing" constant="5" id="TxM-IB-TdE"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="QPX-TB-eFs" secondAttribute="bottom" constant="20" id="U7W-XK-el5"/>
+                            <constraint firstItem="ha0-oy-pkl" firstAttribute="height" secondItem="QPX-TB-eFs" secondAttribute="height" id="Whn-wl-DK4"/>
+                            <constraint firstItem="cbP-9c-ozF" firstAttribute="centerY" secondItem="QPX-TB-eFs" secondAttribute="centerY" id="aGB-zg-RcQ"/>
+                            <constraint firstItem="ha0-oy-pkl" firstAttribute="leading" secondItem="PhE-KY-H9w" secondAttribute="trailing" constant="11" id="f78-25-IYQ"/>
+                            <constraint firstItem="PhE-KY-H9w" firstAttribute="centerY" secondItem="ha0-oy-pkl" secondAttribute="centerY" id="gGM-Pi-gyB"/>
+                            <constraint firstItem="7De-VS-9po" firstAttribute="height" secondItem="kh9-bI-dsS" secondAttribute="height" id="pg1-0F-Cok"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="mapView" destination="7De-VS-9po" id="mNe-Ei-j2x"/>
+                        <outlet property="zoomLabel" destination="PhE-KY-H9w" id="O01-6h-Lw0"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
         </scene>
     </scenes>
 </document>
