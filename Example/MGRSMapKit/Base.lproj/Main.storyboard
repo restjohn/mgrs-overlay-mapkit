@@ -88,6 +88,7 @@
                     </view>
                     <connections>
                         <outlet property="mapView" destination="7De-VS-9po" id="mNe-Ei-j2x"/>
+                        <outlet property="zoomInButton" destination="QPX-TB-eFs" id="brg-qk-Sna"/>
                         <outlet property="zoomLabel" destination="PhE-KY-H9w" id="O01-6h-Lw0"/>
                     </connections>
                 </viewController>

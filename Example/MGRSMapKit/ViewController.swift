@@ -14,6 +14,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var zoomLabel: UILabel!
+    @IBOutlet weak var zoomInButton: UIButton!
 
     private var zoom: Double = 0.0
     private lazy var mgrsOverlay = MGRSOverlay()
@@ -22,7 +23,23 @@ class ViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
-        mapView.showsScale = true
+
+        if #available(iOS 11.0, *) {
+            let scale = MKScaleView(mapView: mapView)
+            scale.translatesAutoresizingMaskIntoConstraints = false
+            scale.scaleVisibility = .visible
+            scale.legendAlignment = .trailing
+            view.addSubview(scale)
+            NSLayoutConstraint.activate([
+                scale.rightAnchor.constraint(equalTo: zoomInButton.rightAnchor),
+                scale.bottomAnchor.constraint(equalTo: zoomInButton.topAnchor, constant: -12.0),
+                scale.heightAnchor.constraint(equalToConstant: 20.0)
+            ])
+        }
+        else {
+            mapView.showsScale = true
+        }
+
         mapView.add(mgrsOverlay, level: .aboveLabels)
 
         /*
