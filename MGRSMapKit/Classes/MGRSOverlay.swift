@@ -8,6 +8,7 @@
 import Foundation
 import MapKit
 import UIKit
+import GEOTRANSUtil
 
 public class MGRSOverlay : NSObject, MKOverlay {
 
@@ -25,10 +26,19 @@ public class MGRSOverlay : NSObject, MKOverlay {
 
 public class MGRSOverlayRenderer : MKOverlayRenderer {
 
+    static let mgrsColor = UIColor(red: 84.0 / 255.0, green: 131.0 / 255.0, blue: 40.0 / 255.0, alpha: 0.75).cgColor
+    static let utmZoneWidthMapPoints = MKMapRectWorld.width / 60.0
+
+    private let mgrs = MSPMGRSHelper()
+
+    class func gridResolutionsFor(scale: MKZoomScale) {
+
+    }
+
     public override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
 
-        let width = 3.0 / zoomScale
-        context.setLineWidth(width)
+        let scaledLineWidth = 3.0 / Double(zoomScale)
+        context.setLineWidth(CGFloat(scaledLineWidth))
 
 //        let tile = rect(for: mapRect)
 //        context.setStrokeColor(UIColor.gray.cgColor)
@@ -36,21 +46,13 @@ public class MGRSOverlayRenderer : MKOverlayRenderer {
 //        context.addRect(tile)
 //        context.strokePath()
 
-        let region = MKCoordinateRegionForMapRect(mapRect)
-        let halfLon = region.span.longitudeDelta / 2.0
-        let left = region.center.longitude - halfLon + 180.0
-        let right = region.center.longitude + halfLon + 180.0
-        let zonesBefore = floor(left / 6.0)
-        let mgrsColor = UIColor(red: 84.0 / 255.0, green: 131.0 / 255.0, blue: 40.0 / 255.0, alpha: 0.75).cgColor
+        let zonesBefore = floor(mapRect.minX / MGRSOverlayRenderer.utmZoneWidthMapPoints)
+
         context.setLineCap(CGLineCap.square)
-        context.setStrokeColor(mgrsColor)
+        context.setStrokeColor(MGRSOverlayRenderer.mgrsColor)
         var zoneCount = Int(zonesBefore) + 1
-        var zoneLon = zonesBefore * 6.0 - 180.0
-        let stop = right - 180.0
-        while (zoneLon <= stop) {
-            let zoneCoord = CLLocationCoordinate2DMake(0.0, zoneLon)
-            let zoneMapPoint = MKMapPointForCoordinate(zoneCoord)
-            let zoneX = zoneMapPoint.x
+        var zoneX = zonesBefore * MGRSOverlayRenderer.utmZoneWidthMapPoints
+        while (zoneX <= mapRect.maxX + scaledLineWidth) {
             let start = point(for: MKMapPoint(x: zoneX, y: mapRect.minY))
             let end = point(for: MKMapPoint(x: zoneX, y: mapRect.maxY))
             context.move(to: start)
@@ -72,7 +74,7 @@ public class MGRSOverlayRenderer : MKOverlayRenderer {
             CTLineDraw(line, context)
             context.restoreGState()
 
-            zoneLon += 6.0
+            zoneX += MGRSOverlayRenderer.utmZoneWidthMapPoints
             zoneCount += 1
         }
     }
