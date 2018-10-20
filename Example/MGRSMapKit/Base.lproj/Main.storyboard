@@ -23,6 +23,10 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="7De-VS-9po">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="1KZ-r3-O2d" appends="YES" id="mkq-yH-T1W"/>
+                                </connections>
                             </mapView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PhE-KY-H9w" userLabel="Zoom Label">
                                 <rect key="frame" x="234" y="621.5" width="42" height="21"/>
@@ -87,12 +91,18 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="mapTap" destination="1KZ-r3-O2d" id="sso-BH-HuS"/>
                         <outlet property="mapView" destination="7De-VS-9po" id="mNe-Ei-j2x"/>
                         <outlet property="zoomInButton" destination="QPX-TB-eFs" id="brg-qk-Sna"/>
                         <outlet property="zoomLabel" destination="PhE-KY-H9w" id="O01-6h-Lw0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="1KZ-r3-O2d">
+                    <connections>
+                        <action selector="mapViewTap:" destination="vXZ-lx-hvc" id="fDk-lK-uOl"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
         </scene>
