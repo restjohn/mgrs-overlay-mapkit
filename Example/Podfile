@@ -2,6 +2,8 @@ use_frameworks!
 
 target 'MGRSMapKit_Example' do
 
+  platform :ios, '10.0'
+
   pod 'MGRSMapKit', :path => '../'
   pod 'GEOTRANS', :path => '../../GEOTRANS'
   pod 'GEOTRANSUtil', :path => '../../GEOTRANSUtil'
