@@ -27,6 +27,12 @@ func yRangeForLatRange(_ latRange: Range<CLLocationDegrees>) -> Range<MKMapUnit>
     return yMin..<yMax
 }
 
+func mapRectForCoords(westLon: CLLocationDegrees, eastLon: CLLocationDegrees, southLat: CLLocationDegrees,  northLat: CLLocationDegrees) -> MKMapRect {
+    let nw = MKMapPoint(CLLocationCoordinate2D(latitude: northLat, longitude: westLon))
+    let se = MKMapPoint(CLLocationCoordinate2D(latitude: southLat, longitude: eastLon))
+    return MKMapRect(x: nw.x, y: nw.y, width: se.x - nw.x, height: se.y - nw.y)
+}
+
 public class MGRSOverlay : NSObject, MKOverlay {
 
     public let boundingMapRect: MKMapRect = MKMapRect.world
@@ -44,33 +50,41 @@ public class MGRSOverlay : NSObject, MKOverlay {
 public class MGRSOverlayRenderer : MKOverlayRenderer {
 
     static let mgrsColor = UIColor(red: 84.0 / 255.0, green: 131.0 / 255.0, blue: 40.0 / 255.0, alpha: 0.75).cgColor
+    static let utmLatRange = -80.0..<84.0
+    static let utmYRange = yRangeForLatRange(utmLatRange)
     static let utmZoneWidthMapPoints = MKMapRect.world.width / 60.0
-    static let utmZoneBoundaryExceptionYRange = yRangeForLatRange(56.0..<90.0)
+    static let utmZoneBoundaryExceptionYRange = yRangeForLatRange(56.0..<84.0)
     static let utmZoneBoundaryExceptions: [Int:[UTMZoneBoundarySegment]] = {
         return [
             31: [
-                UTMZoneBoundarySegment(normalZone: 31, exceptionZone: 32, xMin: xForLon(3.0), yRange: yRangeForLatRange(56.0..<64.0))
+                UTMZoneBoundarySegment(zone: 31, atLon: 0.0, fromNorthLat: utmLatRange.upperBound, toSouthLat: 56.0),
+                UTMZoneBoundarySegment(zone: 32, startLon: 6.0, startLat: 64.0, endLon: 3.0, endLat: 64.0),
+                UTMZoneBoundarySegment(zone: 32, startLon: 3.0, startLat: 64.0, endLon: 3.0, endLat: 56.0),
+                UTMZoneBoundarySegment(zone: 32, startLon: 3.0, startLat: 56.0, endLon: 6.0, endLat: 56.0)
             ],
             32: [
-                UTMZoneBoundarySegment(normalZone: 32, exceptionZone: 32, xMin: xForLon(6.0), yRange: yRangeForLatRange(56.0..<64.0)),
-                UTMZoneBoundarySegment(normalZone: 32, exceptionZone: 33, xMin: xForLon(9.0), yRange: yRangeForLatRange(72.0..<84.0))
+                UTMZoneBoundarySegment(zone: 33, atLon: 9.0, fromNorthLat: utmLatRange.upperBound, toSouthLat: 72.0),
+                UTMZoneBoundarySegment(zone: 32, atLat: 72.0, fromWestLon: 6.0, toEastLon: 12.0),
+                UTMZoneBoundarySegment(zone: 32, atLon: 6.0, fromNorthLat: 72.0, toSouthLat: 64.0)
             ],
             33: [
-                UTMZoneBoundarySegment(normalZone: 33, exceptionZone: 33, xMin: xForLon(12.0), yRange: yRangeForLatRange(72.0..<84.0))
+                UTMZoneBoundarySegment(zone: 33, atLon: 12.0, fromNorthLat: 72.0, toSouthLat: 56.0)
             ],
             34: [
-                UTMZoneBoundarySegment(normalZone: 34, exceptionZone: 34, xMin: xForLon(18.0), yRange: yRangeForLatRange(72.0..<84.0)),
-                UTMZoneBoundarySegment(normalZone: 34, exceptionZone: 35, xMin: xForLon(21.0), yRange: yRangeForLatRange(72.0..<84.0))
+                UTMZoneBoundarySegment(zone: 35, atLon: 21.0, fromNorthLat: utmLatRange.upperBound, toSouthLat: 72.0),
+                UTMZoneBoundarySegment(zone: 34, atLat: 72.0, fromWestLon: 18.0, toEastLon: 24.0),
+                UTMZoneBoundarySegment(zone: 34, atLon: 18.0, fromNorthLat: 72.0, toSouthLat: 56.0)
             ],
             35: [
-                UTMZoneBoundarySegment(normalZone: 35, exceptionZone: 35, xMin: xForLon(24.0), yRange: yRangeForLatRange(72.0..<84.0))
+                UTMZoneBoundarySegment(zone: 35, atLon: 24.0, fromNorthLat: 72.0, toSouthLat: 56.0)
             ],
             36: [
-                UTMZoneBoundarySegment(normalZone: 36, exceptionZone: 36, xMin: xForLon(30.0), yRange: yRangeForLatRange(72.0..<84.0)),
-                UTMZoneBoundarySegment(normalZone: 36, exceptionZone: 37, xMin: xForLon(33.0), yRange: yRangeForLatRange(72.0..<84.0))
+                UTMZoneBoundarySegment(zone: 37, atLon: 33.0, fromNorthLat: utmLatRange.upperBound, toSouthLat: 72.0),
+                UTMZoneBoundarySegment(zone: 36, atLat: 72.0, fromWestLon: 30.0, toEastLon:36.0),
+                UTMZoneBoundarySegment(zone: 36, atLon: 30.0, fromNorthLat: 72.0, toSouthLat: 56.0)
             ],
             37: [
-                UTMZoneBoundarySegment(normalZone: 37, exceptionZone: 37, xMin: xForLon(36.0), yRange: yRangeForLatRange(72.0..<84.0))
+                UTMZoneBoundarySegment(zone: 37, atLon: 36.0, fromNorthLat: 72.0, toSouthLat: 56.0)
             ]
         ]
     }()
@@ -94,31 +108,31 @@ public class MGRSOverlayRenderer : MKOverlayRenderer {
         context.strokePath()
 
         scaledLineWidth = 5.0 / Double(zoomScale)
-        let rectWithLine = MKMapRect(x: mapRect.origin.x, y: mapRect.origin.y, width: mapRect.width + 2 * scaledLineWidth, height: mapRect.height)
+        let rectWithLine = MKMapRect(x: max(0, mapRect.origin.x - scaledLineWidth), y: mapRect.origin.y, width: mapRect.width + scaledLineWidth, height: mapRect.height)
         context.setLineWidth(CGFloat(scaledLineWidth))
         context.setLineCap(CGLineCap.square)
         context.setStrokeColor(MGRSOverlayRenderer.mgrsColor)
+        context.setTextDrawingMode(.fill)
 
-        let zoneBoundaries = utmZoneBoundariesIn(mapRect: rectWithLine)
-        zoneBoundaries.forEach { zoneBoundary in
-            if (zoneBoundary.isGapInNormalZone()) {
-                return
-            }
-            let start = point(for: MKMapPoint(x: zoneBoundary.xMin, y: zoneBoundary.yRange.lowerBound))
-            let end = point(for: MKMapPoint(x: zoneBoundary.xMin, y: zoneBoundary.yRange.upperBound))
+        let segments = utmZoneBoundariesIn(mapRect: rectWithLine)
+        segments.forEach { segment in
+            let start = point(for: segment.start)
+            let end = point(for: segment.end)
             context.move(to: start)
             context.addLine(to: end)
             context.strokePath()
+            if (start.y == end.y) {
+                return
+            }
             context.saveGState()
-            context.setTextDrawingMode(.fill)
             context.textMatrix = CGAffineTransform(translationX: 5.0, y: 5.0)
             context.translateBy(x: start.x, y: end.y)
             context.scaleBy(x: 1.0 / zoomScale, y: -1.0 / zoomScale)
-            let zoneStr = String(format: "%02d", zoneBoundary.normalZone) as CFString
+            let zoneStr = String(format: "%02d", segment.zone) as CFString
             let attrs: [CFString: Any] = [
                 kCTForegroundColorAttributeName: UIColor(red: 84.0 / 255.0, green: 131.0 / 255.0, blue: 40.0 / 255.0, alpha: 1.0).cgColor,
                 kCTFontAttributeName: CTFontCreateWithName("Helvetica" as CFString, 24.0, nil),
-                ]
+            ]
             let zoneLabel = CFAttributedStringCreate(kCFAllocatorDefault, zoneStr, attrs as CFDictionary)
             let line = CTLineCreateWithAttributedString(zoneLabel!)
             CTLineDraw(line, context)
@@ -128,35 +142,65 @@ public class MGRSOverlayRenderer : MKOverlayRenderer {
 
     func utmZoneBoundariesIn(mapRect: MKMapRect) -> [UTMZoneBoundarySegment] {
         var zone = Int(floor(mapRect.maxX / MGRSOverlayRenderer.utmZoneWidthMapPoints)) + 1
-        var zoneX = MKMapUnit(zone - 1) * MGRSOverlayRenderer.utmZoneWidthMapPoints
+        let zoneX = MKMapUnit(zone - 1) * MGRSOverlayRenderer.utmZoneWidthMapPoints
+        var zoneXRange = zoneX..<zoneX + MGRSOverlayRenderer.utmZoneWidthMapPoints
+        let rectXRange = mapRect.minX...mapRect.maxX
+        let rectYRange = mapRect.minY...mapRect.maxY
         var bounds: [UTMZoneBoundarySegment] = []
-        while (zoneX >= mapRect.minX && zone > 0) {
-            if (MGRSOverlayRenderer.utmZoneBoundaryExceptionYRange.overlaps(mapRect.minY...mapRect.maxY) &&
+        while (zoneXRange.overlaps(rectXRange) && zone > 0) {
+            if (MGRSOverlayRenderer.utmZoneBoundaryExceptionYRange.overlaps(rectYRange) &&
                 MGRSOverlayRenderer.utmZoneBoundaryExceptions.contains { k, _ in k == zone }) {
-                let exceptionBoundaries = MGRSOverlayRenderer.utmZoneBoundaryExceptions[zone]
+                var segments: [UTMZoneBoundarySegment] = []
+                let exceptions = MGRSOverlayRenderer.utmZoneBoundaryExceptions[zone]!
+                exceptions.forEach { (segment) in
+                    if (rectYRange.overlaps(segment.start.y...segment.end.y) && segment.zone > 0) {
+                        segments.append(segment)
+                    }
+                }
+                if (mapRect.maxY >= MGRSOverlayRenderer.utmZoneBoundaryExceptionYRange.upperBound) {
+                    segments.append(UTMZoneBoundarySegment(zone: zone, x: zoneXRange.lowerBound,
+                        yRange: MGRSOverlayRenderer.utmZoneBoundaryExceptionYRange.upperBound..<mapRect.maxY))
+                }
+                bounds.append(contentsOf: segments)
             }
-            else {
-                bounds.append(UTMZoneBoundarySegment(normalZone: zone, exceptionZone: nil, xMin: zoneX, yRange: mapRect.minY..<mapRect.maxY))
+            else if (MGRSOverlayRenderer.utmYRange.overlaps(rectYRange) && rectXRange.contains(zoneXRange.lowerBound)) {
+                bounds.append(UTMZoneBoundarySegment(zone: zone, x: zoneXRange.lowerBound,
+                    yRange: max(mapRect.minY, MGRSOverlayRenderer.utmYRange.lowerBound)..<min(mapRect.maxY, MGRSOverlayRenderer.utmYRange.upperBound)))
             }
-            zoneX -= MGRSOverlayRenderer.utmZoneWidthMapPoints
+            zoneXRange = zoneXRange.lowerBound - MGRSOverlayRenderer.utmZoneWidthMapPoints..<(zoneXRange.lowerBound)
             zone -= 1
         }
         return bounds
     }
-}
 
-struct UTMZoneBoundarySegment {
+    struct UTMZoneBoundarySegment {
 
-    let normalZone: Int
-    let exceptionZone: Int?
-    let xMin: MKMapUnit
-    let yRange: Range<MKMapUnit>
+        init(zone: Int, x: MKMapUnit, yRange: Range<MKMapUnit>) {
+            self.zone = zone
+            self.start = MKMapPoint(x: x, y: yRange.lowerBound)
+            self.end = MKMapPoint(x: x, y: yRange.upperBound)
+        }
 
-    func isExceptionBoundary() -> Bool {
-        return exceptionZone != nil
-    }
+        init(zone: Int, gapLatNorth: CLLocationDegrees, gapLatSouth: CLLocationDegrees) {
+            self.init(zone: -abs(zone), atLon: 0.0, fromNorthLat: gapLatNorth, toSouthLat: gapLatSouth)
+        }
 
-    func isGapInNormalZone() -> Bool {
-        return normalZone == exceptionZone
+        init(zone: Int, atLon: CLLocationDegrees, fromNorthLat: CLLocationDegrees, toSouthLat: CLLocationDegrees) {
+            self.init(zone: zone, startLon: atLon, startLat: fromNorthLat, endLon: atLon, endLat: toSouthLat)
+        }
+
+        init(zone: Int, atLat: CLLocationDegrees, fromWestLon: CLLocationDegrees, toEastLon: CLLocationDegrees) {
+            self.init(zone: zone, startLon: fromWestLon, startLat: atLat, endLon: toEastLon, endLat: atLat)
+        }
+
+        init(zone: Int, startLon: CLLocationDegrees, startLat: CLLocationDegrees, endLon: CLLocationDegrees, endLat: CLLocationDegrees) {
+            self.zone = zone
+            self.start = MKMapPoint(CLLocationCoordinate2D(latitude: startLat, longitude: startLon))
+            self.end = MKMapPoint(CLLocationCoordinate2D(latitude: endLat, longitude: endLon))
+        }
+
+        let zone: Int
+        let start: MKMapPoint
+        let end: MKMapPoint
     }
 }
